@@ -20,15 +20,17 @@ usage_="""
 """
 cli = pxssh.pxssh()
 parser = ArgumentParser(description='%(prog)s is an ARP Finder\n',usage=usage_)
+users_list = open('../users.txt')
+passwords_list = open('../passwords.txt')
 
-def cliConn(target='192.168.0.60', usr='admin', passwd='80211Alf.'):
+def cliConn(target, usr, passwd):
     try:
         cli.login(target, usr, passwd)
         msg = 'Fetching INFO...'
         print ("->{:>20}".format(msg))
         return cli
-    except:
-        print("Connection Failed")
+    except KeyboardInterrupt:
+        print("Connection Cancelled")
 
 def cliCMD(ssh,cmd):
     try:
@@ -56,10 +58,18 @@ def main():
     if args.search:
         cmd += args.search[1] + ' | sort'
         host = args.search[0]
-    username = input("Enter username-> ")
-    passwd = input("Enter password-> ")
+    for user in users_list:
+        for password in passwords_list:
+            user = user.strip()
+            password = password.strip()
+            try:
+               ssh = cliConn(host,user,password)
+            except:
+                print('credentials {}|{}'.format(user,password),' invalid.')
+            else:
+                print('Right credentials.')
+                break
     try:
-        ssh = cliConn(host,username,passwd)
         print(cliCMD(ssh,cmd))
     except KeyboardInterrupt:
         print('Execution Aborted')
