@@ -2,7 +2,7 @@
 from argparse import ArgumentParser
 import sys
 from pexpect import pxssh
-import pty
+from datetime import datetime
 
 banner = """
     .------..------..------..------..------..------..------.
@@ -22,6 +22,7 @@ cli = pxssh.pxssh()
 parser = ArgumentParser(description='%(prog)s is an ARP Finder\n',usage=usage_)
 users_list = open('../users.txt')
 passwords_list = open('../passwords.txt')
+log = open('../get_mac_log.txt','a')
 
 def cliConn(target, usr, passwd):
     try:
@@ -63,12 +64,13 @@ def main():
             user = user.strip()
             password = password.strip()
             try:
-               ssh = cliConn(host,user,password)
+                ssh = cliConn(host,user,password)
+                break
             except:
-                print('credentials {}|{}'.format(user,password),' invalid.')
+                now = datetime.now()
+                log.write('{}-{:>5}|{} auth failed\n'.format(now,user,password))
             else:
                 print('Right credentials.')
-                break
     try:
         print(cliCMD(ssh,cmd))
     except KeyboardInterrupt:
