@@ -47,7 +47,7 @@ def cliCMD(ssh,cmd):
 def main():
     print(banner)
     parser.add_argument('-a', '--all', help='This option gets ALL ARP TABLE from the host given')
-    parser.add_argument('-s', '--search', nargs=2, help='This option searches an ARP INFO from the host given based on an IP to look for')
+    parser.add_argument('-s', '--search', nargs='+', help='This option searches an ARP INFO from the host given based on the IP ADDRESSES to look for')
     args = parser.parse_args()
     if args.all is None and args.search is None:
         print(parser.usage)
@@ -57,18 +57,27 @@ def main():
         cmd += ': | sort'
         host = args.all
     if args.search:
-        cmd += args.search[1] + ' | sort'
         host = args.search[0]
+        cmd += "-E -- '"
+        for i,ip in enumerate(args.search): 
+            if i == 0:
+                cmd
+            elif i == len(args.search) - 1:
+                cmd += ip
+            else:
+                cmd += ip + '|'
+        cmd += "'"
     for user in users_list:
+        user = user.strip()
         for password in passwords_list:
-            user = user.strip()
             password = password.strip()
+            now = datetime.now()
             try:
                 ssh = cliConn(host,user,password)
+                log.write('{}-{:>5} auth successful')
                 break
-            except:
-                now = datetime.now()
-                log.write('{}-{:>5}|{} auth failed\n'.format(now,user,password))
+            except Exception as err:
+                log.write('{}-{:>5}|{} auth failed\t|{}\n'.format(now,user,password,err))
             else:
                 print('Right credentials.')
     try:
