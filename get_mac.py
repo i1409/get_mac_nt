@@ -16,7 +16,7 @@ usage_="""
 
     ~$ python3 get_mac.py -h    |   Show the help
     ~$ python3 get_mac.py -a 192.168.1.1    |   Get ARP TABLE from 192.168.1.1
-    ~$ python3 get_mac.py -s 192.168.1.1 10.1.1.1   |   Get the ARP REGISTERED of 10.1.1.1 from 192.168.1.1
+    ~$ python3 get_mac.py -s 192.168.1.1 10.1.1.1 10.1.1.2  |   Get the ARP REGISTERED of 10.1.1.1,10.1.1.2 from 192.168.1.1
 """
 cli = pxssh.pxssh()
 parser = ArgumentParser(description='%(prog)s is an ARP Finder\n',usage=usage_)
