@@ -126,7 +126,7 @@ def main():
             now = datetime.now()
             try:
                 ssh = cliConn(host,user,password)
-                log.write('{}-{:>5} auth successful')
+                log.write('{}-{:>5} auth successful\n'.format(now,user))
                 break
             except Exception as err:
                 log.write('{}-{:>5}|{} auth failed\t|{}\n'.format(now,user,password,err))
