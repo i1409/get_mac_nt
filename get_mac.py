@@ -4,6 +4,7 @@ import sys
 from pexpect import pxssh
 from datetime import datetime
 import random
+import getpass
 
 banner_list = ["""
     .------..------..------..------..------..------..------.
@@ -119,7 +120,7 @@ def main():
                 cmd += ip + '|'
         cmd += "'"
     user = input("Username-> ")
-    password = input('Password-> ')
+    password = getpass.getpass('Password-> ')
     try:
         now = datetime.now()
         ssh = cliConn(host,user,password)

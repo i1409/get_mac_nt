@@ -1,3 +1,1 @@
-2021-12-29 13:36:33.902743-admin auth successful
-2021-12-29 13:38:58.715314- asdfg auth failed on 192.168.0.18	|password refused
-2021-12-29 13:39:27.938562- admin auth successful on 192.168.0.18
+
