@@ -26,7 +26,8 @@ banner_list = ["""
                 |  $$$$$$/| $$                                    
                 \______/ |__/                                    
 """,
-"""  _ _                                
+"""
+     _ _                                
     (_) |                               
     _| |__  _   _ _ __   ___ _ ____  __
     | | '_ \| | | | '_ \ / _ \ '__\ \/ /
@@ -72,9 +73,7 @@ usage_="""
 """
 cli = pxssh.pxssh()
 parser = ArgumentParser(description='%(prog)s is an ARP Finder\n',usage=usage_)
-users_list = open('../users.txt')
-passwords_list = open('../passwords.txt')
-log = open('../get_mac_log.txt','a')
+log = open('./get_mac_log.txt','a')
 num = random.randint(0, 4)
 def cliConn(target, usr, passwd):
     try:
@@ -119,19 +118,18 @@ def main():
             else:
                 cmd += ip + '|'
         cmd += "'"
-    for user in users_list:
-        user = user.strip()
-        for password in passwords_list:
-            password = password.strip()
-            now = datetime.now()
-            try:
-                ssh = cliConn(host,user,password)
-                log.write('{}-{:>5} auth successful\n'.format(now,user))
-                break
-            except Exception as err:
-                log.write('{}-{:>5}|{} auth failed\t|{}\n'.format(now,user,password,err))
-            else:
-                print('Right credentials.')
+    user = input("Username-> ")
+    password = input('Password-> ')
+    try:
+        now = datetime.now()
+        ssh = cliConn(host,user,password)
+        log.write('{}- {:>5} auth successful on {}\n'.format(now,user,host))
+    except Exception as err:
+        print('auth failed')
+        log.write('{}- {:>5} auth failed on {}\t|{}\n'.format(now,user,host,err))
+        exit()
+    else:
+        print('Right credentials.')
     try:
         print(cliCMD(ssh,cmd))
     except KeyboardInterrupt:
